@@ -1,0 +1,69 @@
+:root {
+  /* 색상 */
+  --black: #000000;
+  --white: #ffffff;
+
+  --gray-800: #171717;
+  --gray-700: #333236;
+  --gray-600: #4b4b4b;
+  --gray-500: #787486;
+  --gray-400: #9fa6b2;
+  --gray-300: #d9d9d9;
+  --gray-200: #eeeeee;
+  --gray-100: #fafafa;
+
+  --violet-50: #f1effd;
+  --violet-500: #5534da;
+
+  --green-500: #7ac555;
+
+  --purple-500: #760dde;
+
+  --orange-500: #ffa500;
+
+  --blue-500: #76a5ea;
+
+  --pink-500: #e876ea;
+
+  /* 폰트 */
+  --font-sans: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
+  /* 로고, 이니셜 */
+  --font-eng: "Montserrat", "Inter", system-ui, sans-serif;
+
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Text-3xl */
+  --text-3xl: 32px;
+  --leading-3xl: 42px;
+
+  /* Text-2xl */
+  --text-2xl: 24px;
+  --leading-2xl: 32px;
+
+  /* Text-xl */
+  --text-xl: 20px;
+  --leading-xl: 32px;
+
+  /* Text-2lg */
+  --text-2lg: 18px;
+  --leading-2lg: 26px;
+
+  /* Text-lg */
+  --text-lg: 16px;
+  --leading-lg: 26px;
+
+  /* Text-md */
+  --text-md: 14px;
+  --leading-md: 24px;
+
+  /* Text-sm */
+  --text-sm: 13px;
+  --leading-sm: 22px;
+
+  /* Text-xs */
+  --text-xs: 12px;
+  --leading-xs: 20px;
+}
