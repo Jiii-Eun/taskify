@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <>
-      <div className=""></div>
+      <div className="">홈</div>
     </>
   );
 }
