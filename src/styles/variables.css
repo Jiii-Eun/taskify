@@ -28,7 +28,7 @@
   /* 폰트 */
   --font-sans: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
   /* 로고, 이니셜 */
-  --font-eng: "Montserrat", "Inter", system-ui, sans-serif;
+  --font-eng: "Montserrat", system-ui, sans-serif;
 
   --font-regular: 400;
   --font-medium: 500;

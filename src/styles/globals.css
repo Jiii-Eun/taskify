@@ -11,16 +11,59 @@
 }
 
 @layer base {
-  html {
+  /* 리셋 스타일 */
+  li {
+    list-style: none;
+  }
+  li::marker {
+    content: none;
+  }
+
+  button {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  input,
+  select {
+    vertical-align: middle;
+    border: none;
+    outline: none;
+  }
+
+  hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #cccccc;
+    margin: 1em 0;
+    padding: 0;
+  }
+
+  mark {
+    background-color: transparent;
+    font-weight: bold;
+  }
+  del {
+    text-decoration: line-through;
+  }
+  abbr[title],
+  dfn[title] {
+    border-bottom: 1px dotted;
+    cursor: help;
+  }
+
+  /* 글로벌 스타일 */
+  body {
+    max-width: 1920px;
+    margin: 0 auto;
     font-family: var(--font-sans);
     font-weight: var(--font-regular);
     font-size: var(--text-lg);
     line-height: var(--leading-lg);
-  }
-
-  body {
-    margin: 0;
-    padding: 0;
     @apply bg-background text-foreground;
   }
 

@@ -5,6 +5,8 @@ export default {
   content: ["./src/app/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
+      tablet: "376px",
+      pc: "745px",
       colors: {
         black: "var(--black)",
         white: "var(--white)",
@@ -31,8 +33,8 @@ export default {
       },
 
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-        eng: ["var(--font-eng)", ...fontFamily.sans],
+  --font-sans: "Pretendard", system-ui, sans-serif,
+  --font-eng: "Montserrat", sans-serif,
       },
       fontSize: {
         /* Text-3xl */
