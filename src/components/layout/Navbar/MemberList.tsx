@@ -1,4 +1,4 @@
-export default function DashboardMember() {
+export default function MemberList() {
   return (
     <>
       <div className=""></div>

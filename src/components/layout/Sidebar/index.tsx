@@ -1,4 +1,4 @@
-export default function SlideBar() {
+export default function Sidebar() {
   return (
     <>
       <div className=""></div>
