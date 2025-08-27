@@ -24,17 +24,17 @@ export default {
           50: "var(--violet-50)",
           500: "var(--violet-500)",
         },
-        red: "var(--red-500)",
-        green: "var(--green-500)",
-        purple: "var(--purple-500)",
-        orange: "var(--orange-500)",
-        blue: "var(--blue-500)",
-        pink: "var(--pink-500)",
+        red: "var(--red)",
+        green: "var(--green)",
+        purple: "var(--purple)",
+        orange: "var(--orange)",
+        blue: "var(--blue)",
+        pink: "var(--pink)",
       },
 
       fontFamily: {
-  --font-sans: "Pretendard", system-ui, sans-serif,
-  --font-eng: "Montserrat", sans-serif,
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+        eng: ["var(--font-eng)", ...fontFamily.sans],
       },
       fontSize: {
         /* Text-3xl */

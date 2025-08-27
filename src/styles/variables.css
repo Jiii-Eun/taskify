@@ -15,15 +15,17 @@
   --violet-50: #f1effd;
   --violet-500: #5534da;
 
-  --green-500: #7ac555;
+  --red: #d6173a;
 
-  --purple-500: #760dde;
+  --green: #7ac555;
 
-  --orange-500: #ffa500;
+  --purple: #760dde;
 
-  --blue-500: #76a5ea;
+  --orange: #ffa500;
 
-  --pink-500: #e876ea;
+  --blue: #76a5ea;
+
+  --pink: #e876ea;
 
   /* 폰트 */
   --font-sans: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
