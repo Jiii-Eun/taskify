@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-
 const config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -69,6 +68,7 @@ const config = {
 
         "sm-semibold": ["0.875rem", { lineHeight: "1.25rem", fontWeight: "600" }],
         "sm-medium": ["0.875rem", { lineHeight: "1.25rem", fontWeight: "500" }],
+        "sm-regular": ["0.875rem", { lineHeight: "1.25rem", fontWeight: "400" }],
 
         "xs-semibold": ["0.75rem", { lineHeight: "1rem", fontWeight: "600" }],
         "xs-medium": ["0.75rem", { lineHeight: "1rem", fontWeight: "500" }],
