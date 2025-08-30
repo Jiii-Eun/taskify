@@ -12,7 +12,7 @@ export function cn(...inputs: (string | undefined | null | boolean)[]) {
 //   return (
 //     <button
 //       className={cn(
-//         "px-4 py-2 rounded transition",
+//         "px-4 py-2 rounded-sm transition",
 //         primary ? "bg-blue-500 text-white" : "bg-gray-200 text-black",
 //         "hover:opacity-80"
 //       )}

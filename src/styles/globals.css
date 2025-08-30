@@ -1,3 +1,204 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-tablet: 744px;
+  --breakpoint-pc: 1248px;
+
+  --color-brand-gray-100: #fafafa;
+  --color-brand-gray-200: #eeeeee;
+  --color-brand-gray-300: #d9d9d9;
+  --color-brand-gray-400: #9fa6b2;
+  --color-brand-gray-500: #787486;
+  --color-brand-gray-600: #4b4b4b;
+  --color-brand-gray-700: #333236;
+  --color-brand-gray-800: #171717;
+
+  --color-brand-blue-50: #e2ecff;
+  --color-brand-blue-100: #76a5ea;
+  --color-brand-blue-500: #2661e8;
+
+  --color-brand-red: #d6173a;
+  --color-brand-green: #7ac555;
+  --color-brand-purple: #760dde;
+  --color-brand-orange: #ffa500;
+  --color-brand-pink: #e876ea;
+
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-eng: var(--font-eng), system-ui, sans-serif;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  /* 3xl */
+  .text-3xl-bold {
+    font-size: 2rem;
+    line-height: 2.625rem;
+    font-weight: 700;
+  }
+  .text-3xl-semibold {
+    font-size: 2rem;
+    line-height: 2.625rem;
+    font-weight: 600;
+  }
+
+  /* 2xl */
+  .text-2xl-bold {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+  }
+  .text-2xl-semibold {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 600;
+  }
+  .text-2xl-medium {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 500;
+  }
+  .text-2xl-regular {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 400;
+  }
+
+  /* xl */
+  .text-xl-bold {
+    font-size: 1.25rem;
+    line-height: 2rem;
+    font-weight: 700;
+  }
+  .text-xl-semibold {
+    font-size: 1.25rem;
+    line-height: 2rem;
+    font-weight: 600;
+  }
+  .text-xl-medium {
+    font-size: 1.25rem;
+    line-height: 2rem;
+    font-weight: 500;
+  }
+  .text-xl-regular {
+    font-size: 1.25rem;
+    line-height: 2rem;
+    font-weight: 400;
+  }
+
+  /* 2lg */
+  .text-2lg-bold {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    font-weight: 700;
+  }
+  .text-2lg-semibold {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    font-weight: 600;
+  }
+  .text-2lg-medium {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    font-weight: 500;
+  }
+  .text-2lg-regular {
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    font-weight: 400;
+  }
+
+  /* lg */
+  .text-lg-bold {
+    font-size: 1rem;
+    line-height: 1.625rem;
+    font-weight: 700;
+  }
+  .text-lg-semibold {
+    font-size: 1rem;
+    line-height: 1.625rem;
+    font-weight: 600;
+  }
+  .text-lg-medium {
+    font-size: 1rem;
+    line-height: 1.625rem;
+    font-weight: 500;
+  }
+  .text-lg-regular {
+    font-size: 1rem;
+    line-height: 1.625rem;
+    font-weight: 400;
+  }
+
+  /* md */
+  .text-md-bold {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    font-weight: 700;
+  }
+  .text-md-semibold {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+  }
+  .text-md-medium {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+  }
+  .text-md-regular {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    font-weight: 400;
+  }
+
+  /* sm */
+  .text-sm-semibold {
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+  }
+  .text-sm-medium {
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+  }
+
+  /* xs */
+  .text-xs-semibold {
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+    font-weight: 600;
+  }
+  .text-xs-medium {
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+    font-weight: 500;
+  }
+  .text-xs-regular {
+    font-size: 0.75rem;
+    line-height: 1.125rem;
+    font-weight: 400;
+  }
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-lg-regular-font-size, 1rem);
+    line-height: var(--text-lg-regular-line-height, 1.625rem);
+    font-weight: var(--text-lg-regular-font-weight, 400);
+    color: var(--color-brand-gray-700);
+  }
+}

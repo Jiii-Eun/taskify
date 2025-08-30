@@ -1,4 +1,4 @@
-export default function Home() {
+export default function Page() {
   return (
     <div>
       <h1 className="">Tailwind 테스트</h1>
