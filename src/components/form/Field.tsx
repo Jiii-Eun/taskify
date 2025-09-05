@@ -26,14 +26,14 @@ export default function Field<P extends A11yProps>({
     ...(idError ? { "aria-errormessage": idError } : {}),
   };
   // children 복제, props 추가 후 새로운 리액트 엘리먼트 생성, id 이미 있으면 덮어씀
-  const access = React.cloneElement(children, injected as P);
+  const clonedChild = React.cloneElement(children, injected as P);
 
   return (
     <div className={["w-full space-y-2", className].filter(Boolean).join(" ")}>
       <label htmlFor={id} className="block text-[18px] font-medium text-gray-800">
         {label}
       </label>
-      {access}
+      {clonedChild}
       {error && (
         <p id={idError} role="alert" className="text-xs text-red-600">
           {error}

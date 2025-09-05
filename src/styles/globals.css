@@ -1,8 +1,54 @@
 @import "tailwindcss";
 
+/* Pretendard */
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Montserrat */
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
 @theme {
-  --breakpoint-tablet: 744px;
-  --breakpoint-pc: 1248px;
+  --breakpoint-tablet: 46.5rem; /* 744px */
+  --breakpoint-pc: 78rem; /* 1248px */
 
   --color-brand-gray-100: #fafafa;
   --color-brand-gray-200: #eeeeee;
@@ -23,8 +69,26 @@
   --color-brand-orange: #ffa500;
   --color-brand-pink: #e876ea;
 
-  --font-sans: var(--font-sans), system-ui, sans-serif;
-  --font-eng: var(--font-eng), system-ui, sans-serif;
+  --font-sans: "Pretendard", system-ui, sans-serif;
+  --font-eng: "Montserrat", system-ui, sans-serif;
+
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1rem; /* 16px */
+  --text-2lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 2rem; /* 32px */
+
+  --text-xs--line-height: 1.125rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base--line-height: 1.625rem;
+  --text-lg--line-height: 1.625rem;
+  --text-2lg--line-height: 1.625rem;
+  --text-xl--line-height: 2rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl--line-height: 2.625rem;
 }
 
 /*
@@ -35,158 +99,11 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+
+@custom-variant tablet (@media(width >= 46.5rem));
+@custom-variant pc (@media(width >= 78rem));
+
 @layer base {
-  /* 3xl */
-  .text-3xl-bold {
-    font-size: 2rem;
-    line-height: 2.625rem;
-    font-weight: 700;
-  }
-  .text-3xl-semibold {
-    font-size: 2rem;
-    line-height: 2.625rem;
-    font-weight: 600;
-  }
-
-  /* 2xl */
-  .text-2xl-bold {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    font-weight: 700;
-  }
-  .text-2xl-semibold {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    font-weight: 600;
-  }
-  .text-2xl-medium {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    font-weight: 500;
-  }
-  .text-2xl-regular {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    font-weight: 400;
-  }
-
-  /* xl */
-  .text-xl-bold {
-    font-size: 1.25rem;
-    line-height: 2rem;
-    font-weight: 700;
-  }
-  .text-xl-semibold {
-    font-size: 1.25rem;
-    line-height: 2rem;
-    font-weight: 600;
-  }
-  .text-xl-medium {
-    font-size: 1.25rem;
-    line-height: 2rem;
-    font-weight: 500;
-  }
-  .text-xl-regular {
-    font-size: 1.25rem;
-    line-height: 2rem;
-    font-weight: 400;
-  }
-
-  /* 2lg */
-  .text-2lg-bold {
-    font-size: 1.125rem;
-    line-height: 1.625rem;
-    font-weight: 700;
-  }
-  .text-2lg-semibold {
-    font-size: 1.125rem;
-    line-height: 1.625rem;
-    font-weight: 600;
-  }
-  .text-2lg-medium {
-    font-size: 1.125rem;
-    line-height: 1.625rem;
-    font-weight: 500;
-  }
-  .text-2lg-regular {
-    font-size: 1.125rem;
-    line-height: 1.625rem;
-    font-weight: 400;
-  }
-
-  /* lg */
-  .text-lg-bold {
-    font-size: 1rem;
-    line-height: 1.625rem;
-    font-weight: 700;
-  }
-  .text-lg-semibold {
-    font-size: 1rem;
-    line-height: 1.625rem;
-    font-weight: 600;
-  }
-  .text-lg-medium {
-    font-size: 1rem;
-    line-height: 1.625rem;
-    font-weight: 500;
-  }
-  .text-lg-regular {
-    font-size: 1rem;
-    line-height: 1.625rem;
-    font-weight: 400;
-  }
-
-  /* md */
-  .text-md-bold {
-    font-size: 0.875rem;
-    line-height: 1.5rem;
-    font-weight: 700;
-  }
-  .text-md-semibold {
-    font-size: 0.875rem;
-    line-height: 1.5rem;
-    font-weight: 600;
-  }
-  .text-md-medium {
-    font-size: 0.875rem;
-    line-height: 1.5rem;
-    font-weight: 500;
-  }
-  .text-md-regular {
-    font-size: 0.875rem;
-    line-height: 1.5rem;
-    font-weight: 400;
-  }
-
-  /* sm */
-  .text-sm-semibold {
-    font-size: 0.8125rem;
-    line-height: 1.25rem;
-    font-weight: 600;
-  }
-  .text-sm-medium {
-    font-size: 0.8125rem;
-    line-height: 1.25rem;
-    font-weight: 500;
-  }
-
-  /* xs */
-  .text-xs-semibold {
-    font-size: 0.75rem;
-    line-height: 1.125rem;
-    font-weight: 600;
-  }
-  .text-xs-medium {
-    font-size: 0.75rem;
-    line-height: 1.125rem;
-    font-weight: 500;
-  }
-  .text-xs-regular {
-    font-size: 0.75rem;
-    line-height: 1.125rem;
-    font-weight: 400;
-  }
-
   *,
   ::after,
   ::before,
@@ -196,9 +113,12 @@
   }
   body {
     font-family: var(--font-sans);
-    font-size: var(--text-lg-regular-font-size, 1rem);
-    line-height: var(--text-lg-regular-line-height, 1.625rem);
-    font-weight: var(--text-lg-regular-font-weight, 400);
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+    font-weight: 400;
     color: var(--color-brand-gray-700);
+  }
+  button {
+    cursor: pointer;
   }
 }

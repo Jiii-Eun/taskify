@@ -18,3 +18,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ accessToken: null });
   },
 }));
+
+// 로그인 여부
+export const useIsLoggedIn = () => useAuthStore((s) => !!s.accessToken);

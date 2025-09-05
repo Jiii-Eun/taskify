@@ -50,7 +50,7 @@ export async function apiRequest<Response>(
 
   const response = await fetch(`${BASE_URL}${endpoint}`, fetchOptions);
 
-  // 인증 오류 > 로그아웃, 홈
+  // 인증 오류 > 로그아웃
   if (response.status === 401) {
     useAuthStore.getState().clearToken();
     localStorage.removeItem("accessToken");
