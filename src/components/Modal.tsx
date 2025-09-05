@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useEffect } from "react";
 
 import { cn } from "@/lib/utils/cn";
@@ -8,11 +7,9 @@ type ModalProps = {
   open: boolean;
   children: React.ReactNode;
   size?: "sm" | "md" | "lg" | "xl";
-  isOpenModal?: (open: boolean) => void;
-  className?: string;
 };
 
-function Modal({ open, children, size = "lg", isOpenModal, className }: ModalProps) {
+function Modal({ open, children, size = "lg" }: ModalProps) {
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -31,22 +28,17 @@ function Modal({ open, children, size = "lg", isOpenModal, className }: ModalPro
         sm: "min-w-[368px] max-w-sm p-6",
         md: "min-w-[568px] max-w-md p-6",
         lg: "min-w-[584px] max-w-lg p-8",
-        xl: "min-w-[730px] max-w-xl pt-[30px] pr-[38px] pb-[30px] pl-4",
+        xl: "min-w-[730px] max-w-xl",
       } as const
     )[size] ?? "min-w-[584px] max-w-lg";
 
   return (
-    <div
-      className="fixed top-0 left-0 h-screen w-screen overflow-hidden bg-black/40"
-      onClick={() => isOpenModal?.(false)}
-    >
+    <div className="fixed top-0 left-0 w-screen h-screen overflow-hidden bg-black/40">
       <div
         className={cn(
-          "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white",
+          "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white",
           sizeClass,
-          className,
         )}
-        onClick={(e) => e.stopPropagation()}
       >
         {children}
       </div>
@@ -56,30 +48,23 @@ function Modal({ open, children, size = "lg", isOpenModal, className }: ModalPro
 
 type ModalHeaderProps = {
   title?: string;
-  children?: React.ReactNode;
   onClose?: () => void;
 };
-function ModalHeader({ title, children, onClose }: ModalHeaderProps) {
+function ModalHeader({ title, onClose }: ModalHeaderProps) {
   return (
-    <div className="mb-3 flex justify-between">
+    <div className="flex justify-between mb-3">
       <h3 className="text-2xl font-bold">{title}</h3>
-      {children}
-      {onClose && (
-        <button onClick={onClose}>
-          <Image src="/icons/icon-close-big.svg" alt="close" width={36} height={36} />
-        </button>
-      )}
+      {onClose && <button onClick={onClose}>X</button>}
     </div>
   );
 }
 
 type ModalContextProps = {
   children: React.ReactNode;
-  className?: string;
 };
 
-function ModalContext({ children, className }: ModalContextProps) {
-  return <div className={cn("py-3", className)}>{children}</div>;
+function ModalContext({ children }: ModalContextProps) {
+  return <div className="py-3">{children}</div>;
 }
 
 type ModalFooterProps = {

@@ -9,13 +9,11 @@ export function useDevice(): DeviceType {
 
   useEffect(() => {
     const checkSize = () => {
-      // rem계산으로 변경
-      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-      const widthRem = window.innerWidth / rem;
+      const width = window.innerWidth;
 
-      if (widthRem >= 78) {
+      if (width >= 1248) {
         setDevice("pc");
-      } else if (widthRem >= 46.5) {
+      } else if (width >= 744) {
         setDevice("tablet");
       } else {
         setDevice("mobile");

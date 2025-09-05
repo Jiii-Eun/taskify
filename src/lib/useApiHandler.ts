@@ -1,16 +1,9 @@
-"use client";
-
-import { notFound } from "next/navigation";
 import { DependencyList, useEffect, useState } from "react";
-
-import { useAuthStore } from "@/features/auth/store";
 
 export function useApiHandler<T>(apiFn: () => Promise<T>, deps: DependencyList = []) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-
-  const token = useAuthStore((s) => s.accessToken);
 
   useEffect(() => {
     let isMounted = true;
@@ -18,12 +11,6 @@ export function useApiHandler<T>(apiFn: () => Promise<T>, deps: DependencyList =
     async function fetchData() {
       setLoading(true);
       setError(null);
-
-      if (!token) {
-        notFound();
-        return;
-      }
-
       try {
         const res = await apiFn();
         if (isMounted) setData(res);
@@ -39,7 +26,7 @@ export function useApiHandler<T>(apiFn: () => Promise<T>, deps: DependencyList =
     return () => {
       isMounted = false;
     };
-  }, deps);
+  }, [apiFn, ...deps]);
 
   return { data, loading, error };
 }

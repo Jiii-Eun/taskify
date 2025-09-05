@@ -1,35 +1,11 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-
-import Home from "@/components/home/Home";
-import { useIsLoggedIn } from "@/features/auth/store";
-
-import Loading from "./Loading";
-
-export default function Page() {
-  const router = useRouter();
-  const isLoggedIn = useIsLoggedIn();
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (hydrated && isLoggedIn) {
-      router.replace("/mydashboard");
-    }
-  }, [hydrated, isLoggedIn, router]);
-
-  if (!hydrated) {
-    return <Loading />;
-  }
-
-  if (isLoggedIn) {
-    return <Loading />;
-  }
-
-  return <Home />;
+export default function Home() {
+  return (
+    <div>
+      <h1 className="">Tailwind 테스트</h1>
+      <button className="px-4 py-2 mt-4 text-white rounded bg-violet-500 hover:bg-violet-600">
+        버튼 테스트
+      </button>
+      <div className="bg-brandGray-100 text-3xl-bold">Tailwind 커스텀 확인</div>
+    </div>
+  );
 }
