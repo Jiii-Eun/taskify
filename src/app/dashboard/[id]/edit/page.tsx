@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 import Chip from "@/components/chip/Chip";
@@ -9,6 +11,9 @@ import MyButton from "@/components/layout/Button";
 import Pagination from "@/components/layout/Pagination";
 
 export default function DashboardIdEdit() {
+  const { id } = useParams<{ id: string }>();
+  const dashboardId = id;
+
   const colors = ["#7AC555", "#760DDE", "#FFA500", "#E876EA", "#76A5EA"];
   const [selectedColor, setSelectedColor] = useState("#7AC555");
 
@@ -37,10 +42,13 @@ export default function DashboardIdEdit() {
       {/* 전체 컨테이너 */}
       <div className="pc:max-w-155 flex w-full min-w-71 flex-col gap-[15px]">
         {/* 돌아가기 버튼 */}
-        <button className="tablet:text-base text-brand-gray-700 mb-1 flex text-left text-sm font-medium">
-          <img src="/icons/icon-arrow-left.svg" alt="돌아가기" className="mr-2"></img>
+        <Link
+          href={`/dashboard/${dashboardId}`}
+          className="tablet:text-base text-brand-gray-700 mb-1 flex text-left text-sm font-medium"
+        >
+          <img src="/icons/icon-arrow-left.svg" alt="돌아가기" className="mr-2" />
           돌아가기
-        </button>
+        </Link>
 
         {/* 대시보드 이름 + 색상 */}
         <section className="tablet:px-7 tablet:py-8 rounded-lg bg-white px-4 py-5 shadow-sm">
