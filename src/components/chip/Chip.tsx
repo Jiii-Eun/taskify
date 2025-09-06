@@ -31,13 +31,13 @@ export default function Chip({
         <span
           className={
             "inline-flex h-[26px] min-w-[57px] items-center rounded-full px-2 " +
-            "bg-[#E2ECFF] text-xs text-[#2661E8]" +
+            "text-brand-blue-500 bg-brand-blue-50 text-xs" +
             className
           }
         >
           <span
             aria-hidden
-            className="mr-2 inline-block h-[6px] w-[6px] shrink-0 rounded-full bg-[#2661E8]"
+            className="bg-brand-blue-500 mr-2 inline-block h-[6px] w-[6px] shrink-0 rounded-full"
           />
           {label}
         </span>
@@ -82,7 +82,7 @@ export default function Chip({
         <span
           className={
             "inline-flex h-5 min-w-5 items-center justify-center rounded " +
-            "bg-[#EEEEEE] px-[6px] text-xs font-medium text-[#787486]" +
+            "bg-brand-gray-200 text-brand-gray-500 px-[6px] text-xs font-medium" +
             className
           }
         >
@@ -97,7 +97,7 @@ export default function Chip({
 
       return (
         <div
-          className={`inline-flex items-center justify-center rounded bg-[#E2ECFF] ${plusSizeClasses} ${className}`}
+          className={`bg-brand-blue-50 inline-flex items-center justify-center rounded ${plusSizeClasses} ${className}`}
         >
           <Image
             src={plusIcon}

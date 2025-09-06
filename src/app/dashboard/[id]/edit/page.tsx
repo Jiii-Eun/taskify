@@ -33,11 +33,11 @@ export default function DashboardIdEdit() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] p-6">
+    <div className="bg-brand-gray-100 min-h-screen p-6">
       {/* 전체 컨테이너 */}
       <div className="pc:max-w-155 flex w-full min-w-71 flex-col gap-[15px]">
         {/* 돌아가기 버튼 */}
-        <button className="tablet:text-base mb-1 flex text-left text-sm font-medium text-[#333236]">
+        <button className="tablet:text-base text-brand-gray-700 mb-1 flex text-left text-sm font-medium">
           <img src="/icons/icon-arrow-left.svg" alt="돌아가기" className="mr-2"></img>
           돌아가기
         </button>
@@ -78,7 +78,7 @@ export default function DashboardIdEdit() {
           <div className="mb-6 flex items-center justify-between">
             <h3 className="tablet:text-2xl text-xl font-bold">구성원</h3>
             <div className="flex items-center gap-[15px]">
-              <span className="tablet:text-sm text-xs text-[#333236]">
+              <span className="tablet:text-sm text-brand-gray-700 text-xs">
                 {totalMemberPages} 페이지 중 {memberPage}
               </span>
               <div className="[&>*]:mt-0 [&>*]:flex">
@@ -92,7 +92,7 @@ export default function DashboardIdEdit() {
           </div>
           {/* 라벨 */}
           <div>
-            <Label className="text-sm text-[#9FA6B2]">이름</Label>
+            <Label className="text-brand-gray-400 text-sm">이름</Label>
           </div>
           <ul>
             {members.map((m, idx) => (
@@ -128,7 +128,7 @@ export default function DashboardIdEdit() {
             <h3 className="tablet:text-2xl text-xl font-bold">초대 내역</h3>
 
             <div className="flex items-center gap-[15px]">
-              <span className="tablet:text-sm text-xs text-[#333236]">
+              <span className="tablet:text-sm text-brand-gray-700 text-xs">
                 {totalInvitePages} 페이지 중 {invitePage}
               </span>
 
@@ -153,7 +153,7 @@ export default function DashboardIdEdit() {
 
           {/* 모바일 전용 라벨*/}
           <div className="tablet:hidden mt-4 mb-6 flex items-center justify-between">
-            <Label className="mb-0 text-sm text-[#9FA6B2]">이메일</Label>
+            <Label className="text-brand-gray-400 mb-0 text-sm">이메일</Label>
             <MyButton
               onClick={() => alert("초대하기")}
               color="buttonBlue"
@@ -166,7 +166,7 @@ export default function DashboardIdEdit() {
 
           {/* tablet+ 전용 라벨 */}
           <div className="tablet:block mt-7 hidden">
-            <Label className="mb-0 text-base text-[#9FA6B2]">이메일</Label>
+            <Label className="text-brand-gray-400 mb-0 text-base">이메일</Label>
           </div>
           <ul>
             {invites.map((i, idx) => (
@@ -180,7 +180,7 @@ export default function DashboardIdEdit() {
                 <MyButton
                   onClick={() => alert(`${i.email} 취소`)}
                   color="buttonBasic"
-                  className="tablet:w-21 tablet:text-sm h-8 w-13 rounded-md px-3 py-1 text-xs font-medium text-[#2661E8]"
+                  className="tablet:w-21 tablet:text-sm text-brand-blue-500 h-8 w-13 rounded-md px-3 py-1 text-xs font-medium"
                 >
                   취소
                 </MyButton>
@@ -193,7 +193,7 @@ export default function DashboardIdEdit() {
         <MyButton
           onClick={() => alert("대시보드 삭제")}
           color="buttonBasic"
-          className="tablet:text-lg pc:mb-[33px] tablet:mb-12 tablet:w-80 tablet:h-[62px] mt-2 mb-25 h-13 w-full text-base font-medium text-[#333236]"
+          className="tablet:text-lg pc:mb-[33px] tablet:mb-12 tablet:w-80 tablet:h-[62px] text-brand-gray-700 mt-2 mb-25 h-13 w-full text-base font-medium"
         >
           대시보드 삭제하기
         </MyButton>

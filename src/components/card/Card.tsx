@@ -11,7 +11,7 @@ interface CardProps {
 
 export default function Card({ title, tags, date, image }: CardProps) {
   return (
-    <div className="w-[314px] rounded-md border border-[#D9D9D9] bg-white px-5 py-4">
+    <div className="border-brand-gray-300 w-[314px] rounded-md border bg-white px-5 py-4">
       {/* 이미지 영역 */}
       {image && (
         <Image
@@ -24,7 +24,7 @@ export default function Card({ title, tags, date, image }: CardProps) {
       )}
 
       {/* 제목 */}
-      <h3 className="mb-[10px] text-base font-medium text-[#000000]">{title}</h3>
+      <h3 className="mb-[10px] text-base font-medium text-black">{title}</h3>
 
       {/* 태그 영역 */}
       <div className="mb-[13px] flex flex-wrap gap-2">
