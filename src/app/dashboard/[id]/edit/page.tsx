@@ -35,19 +35,19 @@ export default function DashboardIdEdit() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] p-6">
       {/* 전체 컨테이너 */}
-      <div className="flex w-full max-w-155 flex-col gap-[15px]">
+      <div className="pc:max-w-155 flex w-full min-w-71 flex-col gap-[15px]">
         {/* 돌아가기 버튼 */}
-        <button className="mb-1 flex text-left text-base font-medium text-[#333236]">
+        <button className="tablet:text-base mb-1 flex text-left text-sm font-medium text-[#333236]">
           <img src="/icons/icon-arrow-left.svg" alt="돌아가기" className="mr-2"></img>
           돌아가기
         </button>
 
         {/* 대시보드 이름 + 색상 */}
-        <section className="rounded-lg bg-white px-7 py-8 shadow-sm">
-          <h2 className="mb-6 text-2xl font-bold">비브리지</h2>
+        <section className="tablet:px-7 tablet:py-8 rounded-lg bg-white px-4 py-5 shadow-sm">
+          <h2 className="tablet:text-2xl mb-6 text-xl font-bold">비브리지</h2>
           <div className="flex flex-col gap-4">
             <div>
-              <Label className="text-2lg font-medium">대시보드 이름</Label>
+              <Label className="tablet:text-2lg text-lg font-medium">대시보드 이름</Label>
               <Input placeholder="대시보드 이름" defaultValue="뉴프로젝트" />
             </div>
 
@@ -66,7 +66,7 @@ export default function DashboardIdEdit() {
             <MyButton
               onClick={() => alert("대시보드 변경")}
               color="buttonBlue"
-              className="h-[54px] w-full text-base font-semibold text-white"
+              className="tablet:text-base h-[54px] w-full text-sm font-semibold text-white"
             >
               변경
             </MyButton>
@@ -74,14 +74,14 @@ export default function DashboardIdEdit() {
         </section>
 
         {/* 구성원 리스트 */}
-        <section className="rounded-lg bg-white p-6 shadow-sm">
+        <section className="tablet:p-6 rounded-lg bg-white px-4 py-5 shadow-sm">
           <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-2xl font-bold">구성원</h3>
+            <h3 className="tablet:text-2xl text-xl font-bold">구성원</h3>
             <div className="flex items-center gap-[15px]">
-              <span className="text-sm text-[#333236]">
+              <span className="tablet:text-sm text-xs text-[#333236]">
                 {totalMemberPages} 페이지 중 {memberPage}
               </span>
-              <div className="mt-[-14px]">
+              <div className="[&>*]:mt-0 [&>*]:flex">
                 <Pagination
                   page={memberPage}
                   setPage={setMemberPage}
@@ -113,7 +113,7 @@ export default function DashboardIdEdit() {
                 <MyButton
                   onClick={() => alert(`${m.name} 삭제`)}
                   color="buttonBasic"
-                  className="h-8 w-21 rounded-md px-3 py-1 text-sm font-medium text-[#2661E8]"
+                  className="tablet:w-21 tablet:text-sm h-8 w-13 rounded-md px-3 py-1 text-xs font-medium text-[#2661E8]"
                 >
                   삭제
                 </MyButton>
@@ -123,33 +123,50 @@ export default function DashboardIdEdit() {
         </section>
 
         {/* 초대 내역 */}
-        <section className="rounded-lg bg-white p-6 shadow-sm">
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-2xl font-bold">초대 내역</h3>
+        <section className="tablet:p-6 rounded-lg bg-white px-4 py-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <h3 className="tablet:text-2xl text-xl font-bold">초대 내역</h3>
+
             <div className="flex items-center gap-[15px]">
-              <span className="text-sm text-[#333236]">
+              <span className="tablet:text-sm text-xs text-[#333236]">
                 {totalInvitePages} 페이지 중 {invitePage}
               </span>
-              <div className="mt-[-14px]">
+
+              <div className="[&>*]:mt-0 [&>*]:flex">
                 <Pagination
                   page={invitePage}
                   setPage={setInvitePage}
                   totalPages={totalInvitePages}
                 />
               </div>
+
               <MyButton
                 onClick={() => alert("초대하기")}
                 color="buttonBlue"
-                className="flex h-8 w-[105px] items-center justify-center gap-2 rounded-md text-sm text-white"
+                className="tablet:flex hidden h-8 w-[105px] items-center justify-center gap-2 rounded-md text-sm text-white"
               >
-                <img src="/icons/icon-box-add-white.svg" alt="초대하기" className="h-4 w-4"></img>
+                <img src="/icons/icon-box-add-white.svg" alt="초대하기" className="h-4 w-4" />
                 초대하기
               </MyButton>
             </div>
           </div>
-          {/* 라벨 */}
-          <div>
-            <Label className="text-sm text-[#9FA6B2]">이메일</Label>
+
+          {/* 모바일 전용 라벨*/}
+          <div className="tablet:hidden mt-4 mb-6 flex items-center justify-between">
+            <Label className="mb-0 text-sm text-[#9FA6B2]">이메일</Label>
+            <MyButton
+              onClick={() => alert("초대하기")}
+              color="buttonBlue"
+              className="flex h-[26px] w-[86px] items-center justify-center gap-2 rounded-md text-xs font-medium text-white"
+            >
+              <img src="/icons/icon-box-add-white.svg" alt="초대하기" className="h-4 w-4" />
+              초대하기
+            </MyButton>
+          </div>
+
+          {/* tablet+ 전용 라벨 */}
+          <div className="tablet:block mt-7 hidden">
+            <Label className="mb-0 text-base text-[#9FA6B2]">이메일</Label>
           </div>
           <ul>
             {invites.map((i, idx) => (
@@ -163,7 +180,7 @@ export default function DashboardIdEdit() {
                 <MyButton
                   onClick={() => alert(`${i.email} 취소`)}
                   color="buttonBasic"
-                  className="h-8 w-21 rounded-md px-3 py-1 text-sm font-medium text-[#2661E8]"
+                  className="tablet:w-21 tablet:text-sm h-8 w-13 rounded-md px-3 py-1 text-xs font-medium text-[#2661E8]"
                 >
                   취소
                 </MyButton>
@@ -176,7 +193,7 @@ export default function DashboardIdEdit() {
         <MyButton
           onClick={() => alert("대시보드 삭제")}
           color="buttonBasic"
-          className="text-2lg h-[62px] w-80 font-medium text-[#333236]"
+          className="tablet:text-lg pc:mb-[33px] tablet:mb-12 tablet:w-80 tablet:h-[62px] mt-2 mb-25 h-13 w-full text-base font-medium text-[#333236]"
         >
           대시보드 삭제하기
         </MyButton>
