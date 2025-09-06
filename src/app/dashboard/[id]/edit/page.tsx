@@ -10,9 +10,12 @@ import Label from "@/components/form/Label";
 import MyButton from "@/components/layout/Button";
 import Pagination from "@/components/layout/Pagination";
 
+import InviteModal from "../../components/InviteModal";
+
 export default function DashboardIdEdit() {
   const { id } = useParams<{ id: string }>();
   const dashboardId = id;
+  const [inviteOpen, setInviteOpen] = useState(false);
 
   const colors = ["#7AC555", "#760DDE", "#FFA500", "#E876EA", "#76A5EA"];
   const [selectedColor, setSelectedColor] = useState("#7AC555");
@@ -149,7 +152,7 @@ export default function DashboardIdEdit() {
               </div>
 
               <MyButton
-                onClick={() => alert("초대하기")}
+                onClick={() => setInviteOpen(true)}
                 color="buttonBlue"
                 className="tablet:flex hidden h-8 w-[105px] items-center justify-center gap-2 rounded-md text-sm text-white"
               >
@@ -163,7 +166,7 @@ export default function DashboardIdEdit() {
           <div className="tablet:hidden mt-4 mb-6 flex items-center justify-between">
             <Label className="text-brand-gray-400 mb-0 text-sm">이메일</Label>
             <MyButton
-              onClick={() => alert("초대하기")}
+              onClick={() => setInviteOpen(true)}
               color="buttonBlue"
               className="flex h-[26px] w-[86px] items-center justify-center gap-2 rounded-md text-xs font-medium text-white"
             >
@@ -205,6 +208,8 @@ export default function DashboardIdEdit() {
         >
           대시보드 삭제하기
         </MyButton>
+
+        <InviteModal isOpen={inviteOpen} onClose={() => setInviteOpen(false)} />
       </div>
     </div>
   );
