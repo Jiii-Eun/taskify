@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { useState } from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,14 +6,17 @@ import { cn } from "@/lib/utils/cn";
 
 import { base } from "./ControlStyles";
 
-export default function CalendarCommon() {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+type CalendarCommonProps = {
+  value: Date | null;
+  onChange: (date: Date | null) => void;
+};
 
+export default function CalendarCommon({ value, onChange }: CalendarCommonProps) {
   return (
     <div className="relative">
       <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
+        selected={value}
+        onChange={onChange}
         wrapperClassName="w-full m-0"
         className={cn(base, "h-12 cursor-pointer pr-4 pl-11")}
       />

@@ -37,7 +37,7 @@ function Modal({ open, children, size = "lg", isOpenModal, className }: ModalPro
 
   return (
     <div
-      className="fixed top-0 left-0 h-screen w-screen overflow-hidden bg-black/40"
+      className="fixed top-0 left-0 z-50 h-screen w-screen overflow-hidden bg-black/40"
       onClick={() => isOpenModal?.(false)}
     >
       <div

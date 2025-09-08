@@ -1,10 +1,12 @@
 "use client";
+import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 
 import UserMenu from "@/components/layout/dashboard/Navbar/UserMenu";
 import { getMe } from "@/features/users/api";
 import { useApiHandler } from "@/lib/useApiHandler";
 import { useOutsideClick } from "@/lib/useOutsideClick";
+import { cn } from "@/lib/utils/cn";
 
 export default function User() {
   const { data } = useApiHandler(() => getMe(), []);
@@ -31,11 +33,24 @@ export default function User() {
 
         <div className="tablet:flex ml-3 hidden">{userName}</div>
       </button>
-      {isMenu && (
-        <div className="tablet:right-[-28px] absolute top-11 right-0 w-[128px] rounded-[6px] border bg-white p-1.5">
-          <UserMenu />
-        </div>
-      )}
+
+      <AnimatePresence>
+        {isMenu && (
+          <motion.div
+            key="dropdown"
+            initial={{ clipPath: "inset(0 0 100% 0)", opacity: 0 }}
+            animate={{ clipPath: "inset(0 0 0% 0)", opacity: 1 }}
+            exit={{ clipPath: "inset(0 0 100% 0)", opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className={cn(
+              "tablet:right-[-28px] absolute top-11 right-0 w-[128px] overflow-hidden rounded-[6px] border bg-white p-1.5 shadow-md",
+              "dark:bg-dark-800 dark:border-dark-600",
+            )}
+          >
+            <UserMenu />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,18 +1,23 @@
 "use client";
 import { useState, useRef } from "react";
 
-export default function ImgUpload() {
+type ImgUploadProps = {
+  value: string;
+  onChange: (file: File | null, url: string) => void;
+};
+
+export default function ImgUpload({ value, onChange }: ImgUploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const imgFileRef = useRef<HTMLInputElement | null>(null);
 
-  const onClickInput = () => {
-    imgFileRef.current?.click();
-  };
+  const onClickInput = () => imgFileRef.current?.click();
 
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+    setFile(selected);
+    const preview = URL.createObjectURL(selected);
+    onChange(selected, preview);
   };
 
   return (
@@ -31,10 +36,10 @@ export default function ImgUpload() {
         onClick={onClickInput}
         className="bg-brand-gray-200 flex h-[76px] w-[76px] items-center justify-center rounded border-0"
       >
-        {file ? (
+        {value ? (
           <img
-            src={URL.createObjectURL(file)}
-            alt={file.name}
+            src={value}
+            alt={file?.name ?? "uploaded"}
             className="h-full w-full rounded object-cover"
           />
         ) : (

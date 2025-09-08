@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 /* Pretendard */
 @font-face {
@@ -49,6 +50,16 @@
 @theme {
   --breakpoint-tablet: 46.5rem; /* 744px */
   --breakpoint-pc: 78rem; /* 1248px */
+
+  --color-dark-100: #fafafa;
+  --color-dark-200: #e5e5e5; /* 기본 텍스트 */
+  --color-dark-300: #d4d4d4; /* 보조 텍스트 */
+  --color-dark-400: #a3a3a3; /* 서브텍스트 */
+  --color-dark-500: #525252; /* Secondary 버튼 hover */
+  --color-dark-600: #404040; /* 비활성 버튼 배경 */
+  --color-dark-700: #2a2a2a; /* 보더, 구분선 */
+  --color-dark-800: #1f1f1f; /* 사이드바/카드 */
+  --color-dark-900: #171717; /* 최상위 배경 */
 
   --color-brand-gray-100: #fafafa;
   --color-brand-gray-200: #eeeeee;

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Home from "@/components/home/Home";
 import { useIsLoggedIn } from "@/features/auth/store";
 
-import Loading from "./Loading";
+import Loading from "./loading";
 
 export default function Page() {
   // zustand활용했지만 리다이렉트 할 때는 쿠키사용이 좋아보인다.

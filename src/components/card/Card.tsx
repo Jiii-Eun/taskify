@@ -1,16 +1,14 @@
+"use client";
 import clsx from "clsx";
 import Image from "next/image";
+import { useState } from "react";
 
+import DetailCardModal from "@/app/dashboard/components/cardModal/DetailCardModal";
+import type { CardData } from "@/app/dashboard/types";
 import Chip from "@/components/chip/Chip";
 
-interface CardProps {
-  title: string;
-  tags: string[];
-  date: string;
-  image?: string;
-}
-
-export default function Card({ title, tags, date, image }: CardProps) {
+export default function Card({ title, tags, dueDate, imageUrl }: CardData) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div
       className={clsx(
@@ -23,11 +21,14 @@ export default function Card({ title, tags, date, image }: CardProps) {
         // pc
         "pc:w-[314px] pc:flex-col pc:h-auto pc:py-4",
       )}
+      onClick={() => {
+        setIsOpen(!isOpen);
+      }}
     >
       {/* 이미지 영역 */}
-      {image && (
+      {imageUrl && (
         <Image
-          src={image}
+          src={imageUrl}
           alt={title}
           width={274}
           height={160}
@@ -72,7 +73,7 @@ export default function Card({ title, tags, date, image }: CardProps) {
           <div className="tablet:justify-start tablet:gap-4 pc:justify-between pc:w-full flex items-center justify-between text-xs text-gray-500">
             <div className="flex items-center gap-1">
               <Image src="/icons/icon-calender.svg" alt="calendar" width={18} height={18} />
-              <span>{date}</span>
+              <span>{dueDate}</span>
             </div>
             <img
               src="/images/img-profile-sample.svg"
@@ -82,6 +83,7 @@ export default function Card({ title, tags, date, image }: CardProps) {
           </div>
         </div>
       </div>
+      {isOpen && <DetailCardModal isOpen setIsOpen={setIsOpen} />}
     </div>
   );
 }

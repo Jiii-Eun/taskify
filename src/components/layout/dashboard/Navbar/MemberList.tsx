@@ -12,6 +12,7 @@ export default function MemberList({ members }: { members: Member[] }) {
 
   const liStyle = cn(
     "[&>li]:h-[34px] [&>li]:w-[34px] [&>li]:tablet:h-[38px] [&>li]:tablet:w-[38px] [&>li]:overflow-hidden [&>li]:rounded-full [&>li]:border-3 [&>li]:border-white [&>li:not(:first-child)]:-ml-2",
+    "dark:[&>li]:border-dark-700",
   );
 
   return (

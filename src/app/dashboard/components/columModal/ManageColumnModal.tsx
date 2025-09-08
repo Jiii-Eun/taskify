@@ -7,18 +7,23 @@ import Button from "@/components/layout/Button";
 import { Modal, ModalHeader, ModalContext, ModalFooter } from "@/components/Modal";
 import { updateColumn } from "@/features/columns/api";
 
+import type { ColumnData } from "../../types";
+
 type ModalType = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  columnId: number;
+  setColumns: React.Dispatch<React.SetStateAction<ColumnData[]>>;
 };
 
-const COLUMN_ID = 54526;
-
-export default function CreateColumnModal({ isOpen, setIsOpen }: ModalType) {
+export default function CreateColumnModal({ isOpen, setIsOpen, columnId, setColumns }: ModalType) {
   const [modifyColumn, setModifyColumn] = useState("");
   const handleUpdate = async () => {
     try {
-      await updateColumn(COLUMN_ID, { title: modifyColumn.trim() });
+      await updateColumn(columnId, { title: modifyColumn.trim() });
+      setColumns((prev) =>
+        prev.map((col) => (col.id === columnId ? { ...col, title: modifyColumn.trim() } : col)),
+      );
       setIsOpen(false);
     } catch (e) {
       alert((e as Error).message || "컬럼 수정 오류");
