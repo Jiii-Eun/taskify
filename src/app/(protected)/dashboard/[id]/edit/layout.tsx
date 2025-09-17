@@ -2,7 +2,7 @@ import { Dashboard } from "@/features/dashboard/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default async function EditLayout({
+export default async function Layout({
   children,
   params,
 }: {
