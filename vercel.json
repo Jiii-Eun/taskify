@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/proxy/:path*",
-      "destination": "https://sp-taskify-api.vercel.app/17-2/:path*"
-    }
-  ]
-}
