@@ -8,19 +8,21 @@ export default async function Layout({
   params,
 }: {
   children: React.ReactNode;
-  params: { id: string };
+  params: any;
 }) {
   const cookieStore = await cookies();
   const cookie = cookieStore.get("accessToken")?.value;
   const cookieHeader = cookie ? `accessToken=${cookie}` : "";
 
-  const dashboard = await apiRequest<Dashboard>(`/dashboards/${params.id}`, {
+  const { id } = params as { id: string };
+
+  const dashboard = await apiRequest<Dashboard>(`/dashboards/${id}`, {
     method: "GET",
     cookieHeader,
   });
 
   if (!dashboard.createdByMe) {
-    redirect(`/dashboard/${params.id}`);
+    redirect(`/dashboard/${id}`);
   }
 
   return <>{children}</>;
