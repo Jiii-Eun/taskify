@@ -7,7 +7,7 @@ export default async function EditLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: unknown;
+  params: any;
 }) {
   const { id } = params as { id: string };
 
