@@ -1,7 +1,6 @@
+import { Dashboard } from "@/features/dashboard/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { apiRequest } from "@/lib/apiRequest";
-import { Dashboard } from "@/features/dashboard/types";
 
 export default async function Layout({
   children,
@@ -10,16 +9,23 @@ export default async function Layout({
   children: React.ReactNode;
   params: any;
 }) {
-  const cookieStore = await cookies();
-  const cookie = cookieStore.get("accessToken")?.value;
-  const cookieHeader = cookie ? `accessToken=${cookie}` : "";
-
   const { id } = params as { id: string };
 
-  const dashboard = await apiRequest<Dashboard>(`/dashboards/${id}`, {
-    method: "GET",
-    cookieHeader,
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get("accessToken")?.value;
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboards/${id}`, {
+    headers: {
+      Authorization: `Bearer ${cookie}`,
+    },
+    cache: "no-store",
   });
+
+  if (!res.ok) {
+    redirect("/mydashboard");
+  }
+
+  const dashboard: Dashboard = await res.json();
 
   if (!dashboard.createdByMe) {
     redirect(`/dashboard/${id}`);

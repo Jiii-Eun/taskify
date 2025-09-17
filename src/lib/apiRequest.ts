@@ -1,18 +1,15 @@
-const isServer = typeof window === "undefined";
-
-const BASE_URL = isServer ? `${process.env.NEXT_PUBLIC_FRONT_URL}/api/proxy` : "/api/proxy";
+const BASE_URL = "/api/proxy";
 
 interface FetchOptions extends Omit<RequestInit, "body"> {
   isFormData?: boolean;
   data?: unknown;
-  cookieHeader?: string;
 }
 
 export async function apiRequest<Response>(
   endpoint: string,
   options: FetchOptions = {},
 ): Promise<Response> {
-  const { isFormData, headers, data, cookieHeader, ...rest } = options;
+  const { isFormData, headers, data, ...rest } = options;
 
   const fetchOptions: RequestInit = {
     ...rest,
@@ -21,13 +18,6 @@ export async function apiRequest<Response>(
       ...(headers as Record<string, string>),
     },
   };
-
-  if (cookieHeader) {
-    fetchOptions.headers = {
-      ...fetchOptions.headers,
-      Cookie: cookieHeader,
-    };
-  }
 
   if (!isFormData && data !== undefined) {
     fetchOptions.headers = {
