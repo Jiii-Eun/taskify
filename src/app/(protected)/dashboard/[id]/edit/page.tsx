@@ -9,23 +9,22 @@ import Input from "@/components/form/Input";
 import Label from "@/components/form/Label";
 import InviteModal from "@/components/modal/InviteModal";
 import MyButton from "@/components/common/Button";
-import Pagination from "@/components/common/Pagination";
 import {
   getDashboardById,
   updateDashboard,
   deleteDashboard,
   getDashboardInvitations,
   cancelDashboardInvitation,
-  // inviteToDashboard,
 } from "@/features/dashboard/api";
 import { getMembers, deleteMember } from "@/features/members/api";
-import { useQueryClient } from "@tanstack/react-query";
+
+import InviteList from "@/components/common/dashboard/edit/InviteList";
+import MembersList from "@/components/common/dashboard/edit/MembersList";
 
 export default function DashboardIdEdit() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const dashboardId = Number(id);
-  const queryClient = useQueryClient();
 
   const [inviteOpen, setInviteOpen] = useState(false);
 
@@ -218,122 +217,23 @@ export default function DashboardIdEdit() {
         </section>
 
         {/* 구성원 리스트 */}
-        <section className="tablet:p-6 rounded-lg bg-white px-4 py-5 shadow-sm">
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="tablet:text-2xl text-xl font-bold">구성원</h3>
-            <div className="flex items-center gap-[15px]">
-              <span className="tablet:text-sm text-brand-gray-700 text-xs">
-                {totalMemberPages} 페이지 중 {memberPage}
-              </span>
-              <div className="[&>*]:mt-0 [&>*]:flex">
-                <Pagination
-                  page={memberPage}
-                  setPage={setMemberPage}
-                  totalPages={Math.max(totalMemberPages, 1)}
-                />
-              </div>
-            </div>
-          </div>
-          {/* 라벨 */}
-          <div>
-            <Label className="text-brand-gray-400 text-sm">이름</Label>
-          </div>
-          <ul>
-            {members.map((m, idx) => {
-              const isOwner = m?.isOwner;
-
-              return (
-                <li
-                  key={m.id}
-                  className={`flex h-[70px] items-center justify-between py-3 ${
-                    idx !== members.length - 1 ? "border-brand-gray-200 border-b" : ""
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={m.profileImageUrl || "/images/img-profile-sample.svg"}
-                      alt={m.nickname}
-                      className="h-[38px] w-[38px] rounded-full object-cover"
-                    />
-                    <span className="text-sm">{m.nickname}</span>
-                  </div>
-                  {!isOwner && (
-                    <MyButton
-                      onClick={() => handleDeleteMember(m.id)}
-                      color="buttonBasic"
-                      className="tablet:w-21 tablet:text-sm text-brand-blue-500 h-8 w-13 rounded-md px-3 py-1 text-xs font-medium"
-                    >
-                      삭제
-                    </MyButton>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+        <MembersList
+          members={members}
+          page={memberPage}
+          totalPages={totalMemberPages}
+          setPage={setMemberPage}
+          onDeleteMember={handleDeleteMember}
+        />
 
         {/* 초대 내역 */}
-        <section className="tablet:p-6 rounded-lg bg-white px-4 py-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h3 className="tablet:text-2xl text-xl font-bold">초대 내역</h3>
-            <div className="flex items-center gap-[15px]">
-              <span className="tablet:text-sm text-brand-gray-700 text-xs">
-                {totalInvitePages} 페이지 중 {invitePage}
-              </span>
-              <div className="[&>*]:mt-0 [&>*]:flex">
-                <Pagination
-                  page={invitePage}
-                  setPage={setInvitePage}
-                  totalPages={Math.max(totalInvitePages, 1)}
-                />
-              </div>
-              <MyButton
-                onClick={() => setInviteOpen(true)}
-                color="buttonBlue"
-                className="tablet:flex hidden h-8 w-[105px] items-center justify-center gap-2 rounded-md text-sm"
-              >
-                <img src="/icons/icon-box-add-white.svg" alt="초대하기" className="h-4 w-4" />
-                초대하기
-              </MyButton>
-            </div>
-          </div>
-          {/* 모바일 전용 라벨*/}
-          <div className="tablet:hidden mt-4 mb-6 flex items-center justify-between">
-            <Label className="text-brand-gray-400 mb-0 text-sm">이메일</Label>
-            <MyButton
-              onClick={() => setInviteOpen(true)}
-              color="buttonBlue"
-              className="flex h-[26px] w-[86px] items-center justify-center gap-2 rounded-md text-xs font-medium"
-            >
-              <img src="/icons/icon-box-add-white.svg" alt="초대하기" className="h-4 w-4" />
-              초대하기
-            </MyButton>
-          </div>
-
-          {/* tablet+ 전용 라벨 */}
-          <div className="tablet:block mt-7 hidden">
-            <Label className="text-brand-gray-400 mb-0 text-base">이메일</Label>
-          </div>
-          <ul>
-            {invites.map((i, idx) => (
-              <li
-                key={i.id}
-                className={`flex h-[70px] items-center justify-between py-3 ${
-                  idx !== invites.length - 1 ? "border-b border-gray-200" : ""
-                }`}
-              >
-                <span className="text-sm">{i.email}</span>
-                <MyButton
-                  onClick={() => handleCancelInvitation(i.id)}
-                  color="buttonBasic"
-                  className="tablet:w-21 tablet:text-sm text-brand-blue-500 h-8 w-13 rounded-md px-3 py-1 text-xs font-medium"
-                >
-                  취소
-                </MyButton>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <InviteList
+          invites={invites}
+          page={invitePage}
+          totalPages={totalInvitePages}
+          setPage={setInvitePage}
+          onCancel={handleCancelInvitation}
+          onOpenInviteModal={() => setInviteOpen(true)}
+        />
 
         {/* 삭제 버튼 */}
         <MyButton
