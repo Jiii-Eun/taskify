@@ -9,6 +9,7 @@ import Input from "@/components/form/Input";
 import Label from "@/components/form/Label";
 import InviteModal from "@/components/modal/InviteModal";
 import MyButton from "@/components/common/Button";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   getDashboardById,
   updateDashboard,
@@ -25,6 +26,7 @@ export default function DashboardIdEdit() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const dashboardId = Number(id);
+  const queryClient = useQueryClient();
 
   const [inviteOpen, setInviteOpen] = useState(false);
 
