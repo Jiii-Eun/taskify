@@ -116,6 +116,9 @@ export default function DashboardIdEdit() {
 
       setDisplayName(dashboardName);
       alert("대시보드가 성공적으로 수정되었습니다.");
+
+      queryClient.invalidateQueries({ queryKey: ["dashboards"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard", dashboardId] });
     } catch (e) {
       console.error("대시보드 수정 실패", e);
       alert("대시보드 수정에 실패했습니다.");
