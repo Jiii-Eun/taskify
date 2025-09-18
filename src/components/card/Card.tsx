@@ -18,6 +18,7 @@ type CardWithAssignee = Omit<CardData, "tags"> & {
     nickname: string;
     profileImageUrl?: string;
   };
+  columns?: ColumnData[];
   setColumns?: React.Dispatch<React.SetStateAction<ColumnData[]>>;
   dashboardId?: number;
   columnId?: number;

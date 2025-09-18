@@ -10,7 +10,7 @@ import { getCard, deleteCard } from "@/features/cards/api";
 import { cn } from "@/lib/utils/cn";
 
 import Comment from "./Comment";
-import ModifyCardModal from "./ModifyCardModal";
+import ModifyCardModal from "./CardModal";
 import { ColumnData } from "@/features/dashboard/types";
 import { Card } from "@/features/cards/types";
 import { getColorForTag } from "@/lib/utils/tagColor";
@@ -18,6 +18,7 @@ import { getColorForTag } from "@/lib/utils/tagColor";
 type ModalType = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  columns?: ColumnData[];
   setColumns?: React.Dispatch<React.SetStateAction<ColumnData[]>>;
   dashboardId?: number;
   columnId?: number;

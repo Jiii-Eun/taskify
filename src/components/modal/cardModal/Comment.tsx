@@ -71,6 +71,12 @@ export default function CommentList({ cardId, columnId, dashboardId }: commentPr
   const handleCreate = async () => {
     if (!input.trim() || isLoading) return;
 
+    // 필수 값들 검증
+    if (!cardId || !columnId || !dashboardId) {
+      console.error("필수 정보가 누락되었습니다.");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await createComment({

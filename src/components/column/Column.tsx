@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 
 import DeleteColumnModal from "@/components/modal/columnModal/DeleteColumnModal";
 import ManageColumnModal from "@/components/modal/columnModal/ManageColumnModal";
-import CreateCardModal from "@/components/modal/cardModal/ModifyCardModal";
+import CreateCardModal from "@/components/modal/cardModal/CardModal";
 import Card from "@/components/card/Card";
 import Chip from "@/components/common/chip/Chip";
 import KebabModal from "@/components/modal/KebabModal";
@@ -25,7 +25,6 @@ export default function Column({
   setColumns,
   columns,
 }: ColumnProps) {
-  console.log("컬럼이 컬럼에서", columns);
   const [modal, setModal] = useState<null | "manage" | "delete" | "card">(null);
   const loader = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(false);
@@ -172,7 +171,6 @@ export default function Column({
           setColumns={setColumns}
           dashboardId={dashboardId}
           columnId={columnId}
-          columns={columns}
           mode="create"
         />
       )}
