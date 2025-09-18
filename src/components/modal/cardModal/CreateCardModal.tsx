@@ -13,7 +13,6 @@ import Button from "@/components/common/Button";
 import { Modal, ModalHeader, ModalContext, ModalFooter } from "@/components/modal/Modal";
 import { createCard } from "@/features/cards/api";
 import { uploadCardImage } from "@/features/columns/api";
-import { useColumnId } from "@/features/columns/store";
 import type { Card } from "@/features/cards/types";
 import { ColumnData } from "@/features/dashboard/types";
 import { getMembers } from "@/features/members/api";
@@ -27,6 +26,8 @@ type ModalType = {
   setIsOpen: () => void;
   setColumns: React.Dispatch<React.SetStateAction<ColumnData[]>>;
   onCardCreated?: () => void;
+  dashboardId: number;
+  columnId: number;
 };
 
 export default function CreateCardModal({
@@ -34,10 +35,9 @@ export default function CreateCardModal({
   setIsOpen,
   setColumns,
   onCardCreated,
+  dashboardId,
+  columnId,
 }: ModalType) {
-  // Zustand에서 컬럼 정보 가져오기
-  const { columnIdData, setCardId, setUserId, setMembersId } = useColumnId();
-
   // input 값들
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -46,16 +46,11 @@ export default function CreateCardModal({
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const [members, setMembers] = useState<Option[]>([]);
   const [assigneeId, setAssigneeId] = useState<number | null>(null);
 
   // 필수 값 체크
   const isDisabled = title.trim() === "" || description.trim() === "";
-
-  // Zustand에서 값 가져오기
-  const dashboardId = columnIdData?.dashboardId ?? 0;
-  const columnId = columnIdData?.columnId ?? 0;
 
   useEffect(() => {
     if (!isOpen || !dashboardId) return;
@@ -88,14 +83,11 @@ export default function CreateCardModal({
   const handleAssigneeSelect = (opt: Option) => {
     const selectedId = Number(opt.value);
     setAssigneeId(selectedId);
-
-    // 선택된 담당자만 Zustand에 저장
-    setMembersId([opt]);
   };
 
   const handleCreate = async () => {
     if (isDisabled || isLoading) return;
-    if (!columnIdData) {
+    if (!columnId) {
       alert("컬럼 정보가 없습니다.");
       return;
     }
@@ -151,17 +143,17 @@ export default function CreateCardModal({
       // API 응답 구조에 따른 처리
       const createdCard: Card =
         "data" in (createResult as any) ? (createResult as any).data : createResult;
-
-      const createdCardId = createdCard as Card & { id: number };
-      if (createdCardId.id) {
-        setCardId(createdCardId.id);
-        setUserId(assigneeId);
-      }
+      const createColumnId = createdCard.columnId;
+      // const createdCardId = createdCard as Card & { id: number };
+      // if (createdCardId.id) {
+      //   setCardId(createdCardId.id);
+      //   setUserId(assigneeId);
+      // }
 
       // 컬럼 상태 업데이트
       setColumns((prevColumns) =>
         prevColumns.map((col) =>
-          col.id === columnId
+          col.id === createColumnId
             ? {
                 ...col,
                 cards: [{ ...createdCard, tags } as CardWithTags, ...(col.cards ?? [])],

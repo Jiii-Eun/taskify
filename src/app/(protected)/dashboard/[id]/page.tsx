@@ -6,21 +6,17 @@ import Chip from "@/components/common/chip/Chip";
 import Column from "@/components/column/Column";
 import MyButton from "@/components/common/Button";
 import { getColumns } from "@/features/columns/api";
-import { useColumnId } from "@/features/columns/store";
 import { ColumnData } from "@/features/dashboard/types";
-import CreateCardModal from "@/components/modal/cardModal/CreateCardModal";
 import CreateColumnModal from "@/components/modal/columnModal/CreateColumnModal";
 
 export default function DashboardId() {
   const { id } = useParams();
   const dashboardId = Number(id);
 
-  const [modal, setModal] = useState<null | "card" | "column">(null);
+  const [modal, setModal] = useState<null | "column">(null);
   const [isKebabOpen, setIsKebabOpen] = useState<number | null>(null);
   const [columns, setColumns] = useState<ColumnData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  // Zustand 스토어에서 함수 가져오기
-  const { setColumnIdData, setStatus } = useColumnId();
 
   useEffect(() => {
     if (!dashboardId) return;
@@ -30,30 +26,15 @@ export default function DashboardId() {
         setIsLoading(true);
         const response = await getColumns(dashboardId);
         const columnsData = Array.isArray(response) ? response : response?.data || [];
-
         setColumns(columnsData);
-
-        const statusMap = Object.fromEntries(columnsData.map((c) => [c.title, c.id]));
-        setStatus(statusMap);
       } catch (error) {
-        console.error("컬럼 목록 조회 실패:", error);
+        console.error("컬럼 목록 조회 실패", error);
         setColumns([]);
       } finally {
         setIsLoading(false);
       }
     })();
   }, [dashboardId]);
-
-  // 카드 추가 버튼 클릭 시 - zustand에 정보 저장하고 모달 열기
-  const handleAddCard = (columnId: number, columnTitle: string) => {
-    console.log("카드 추가 클릭 - 컬럼 ID:", columnId, "대시보드 ID:", dashboardId);
-
-    // Zustand에 현재 선택된 컬럼과 대시보드 정보 저장
-    setColumnIdData(dashboardId, columnId, columnTitle);
-
-    // 카드 생성 모달 열기
-    setModal("card");
-  };
 
   const handleAddColumn = () => {
     setModal("column");
@@ -74,7 +55,6 @@ export default function DashboardId() {
           key={item.id}
           status={item.title}
           cards={item.cards ?? []}
-          onAddCard={() => handleAddCard(item.id, item.title)}
           kebabIndex={isKebabOpen === i}
           isKebabOpen={() => setIsKebabOpen((prev) => (prev === i ? null : i))}
           dashboardId={dashboardId}
@@ -93,12 +73,6 @@ export default function DashboardId() {
           <Chip variant="add" />
         </MyButton>
       </div>
-
-      {/* 모달들 */}
-      {modal === "card" && (
-        <CreateCardModal isOpen setIsOpen={closeModal} setColumns={setColumns} />
-      )}
-
       {modal === "column" && (
         <CreateColumnModal isOpen setIsOpen={closeModal} setColumns={setColumns} />
       )}

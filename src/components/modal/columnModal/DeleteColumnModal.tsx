@@ -2,7 +2,6 @@
 
 import Button from "@/components/common/Button";
 import { Modal, ModalContext, ModalFooter } from "@/components/modal/Modal";
-import { deleteColumn } from "@/features/columns/api";
 import { ColumnData } from "@/features/dashboard/types";
 
 type ModalType = {
@@ -16,7 +15,6 @@ export default function DeleteColumnModal({ isOpen, setIsOpen, columnId, setColu
   const handleDelete = async () => {
     alert("컬럼의 모든 카드가 삭제됩니다");
     try {
-      await deleteColumn(columnId);
       setColumns((prev) => prev.filter((col) => col.id !== columnId));
       setIsOpen(false);
     } catch (e) {

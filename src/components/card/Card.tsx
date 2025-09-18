@@ -19,7 +19,10 @@ type CardWithAssignee = Omit<CardData, "tags"> & {
     profileImageUrl?: string;
   };
   setColumns?: React.Dispatch<React.SetStateAction<ColumnData[]>>;
+  dashboardId?: number;
   columnId?: number;
+  cardId?: number;
+  status: string;
 };
 
 export default function Card({
@@ -29,7 +32,10 @@ export default function Card({
   imageUrl,
   assignee,
   setColumns,
+  dashboardId,
   columnId,
+  cardId,
+  status,
 }: CardWithAssignee) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -130,7 +136,10 @@ export default function Card({
             isOpen
             setIsOpen={setIsOpen}
             setColumns={setColumns}
+            dashboardId={dashboardId}
             columnId={columnId}
+            cardId={cardId}
+            status={status}
           />
         </div>
       )}

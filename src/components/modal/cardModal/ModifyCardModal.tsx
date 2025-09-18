@@ -1,8 +1,7 @@
 "use client";
 import dayjs from "dayjs";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import Chip from "@/components/common/chip/Chip";
 import DatePicker from "@/components/form/DatePicker";
 import Field from "@/components/form/Field";
 import ImgUpload from "@/components/form/ImgUpload";
@@ -12,33 +11,43 @@ import TagInput, { Tag } from "@/components/form/TagInput";
 import Textarea from "@/components/form/Textarea";
 import Button from "@/components/common/Button";
 import { Modal, ModalHeader, ModalContext, ModalFooter } from "@/components/modal/Modal";
-import { updateCard } from "@/features/cards/api";
+import { createCard, updateCard } from "@/features/cards/api";
 import { uploadCardImage } from "@/features/columns/api";
-import { useColumnId } from "@/features/columns/store";
+import type { Card } from "@/features/cards/types";
 import { ColumnData } from "@/features/dashboard/types";
+import { Member } from "@/features/members/types";
 import { getMembers } from "@/features/members/api";
-import { Card } from "@/features/cards/types";
+
 import { getColorForTag } from "@/lib/utils/tagColor";
 
-const now = dayjs();
+type CardWithTags = Card & { tags: Tag[] };
 
-type ModalType = {
+type CardModalProps = {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: () => void | React.Dispatch<React.SetStateAction<boolean>>;
+  setColumns: React.Dispatch<React.SetStateAction<ColumnData[]>>;
+  dashboardId: number;
+  columnId: number;
+  mode?: "create" | "edit";
   cardData?: Card | null;
-  setColumns?: React.Dispatch<React.SetStateAction<ColumnData[]>>;
-  onModifyComplete?: () => void;
-  columnTitle: string;
+  cardId?: number;
+  status?: string | Option[]; // 상태 옵션들
+  members?: Member | Option[]; // 멤버 옵션들
 };
 
-export default function ModifyCardModal({
+export default function CardModal({
   isOpen,
   setIsOpen,
-  cardData,
   setColumns,
-  onModifyComplete,
-  columnTitle,
-}: ModalType) {
+  dashboardId,
+  columnId,
+  mode = "create",
+  cardData = null,
+  cardId,
+  status,
+  members: propMembers,
+}: CardModalProps) {
+  // 폼 상태
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState<Date | null>(null);
@@ -46,38 +55,23 @@ export default function ModifyCardModal({
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedColumnId, setSelectedColumnId] = useState<number | null>(null); // 추가: 선택된 컬럼 ID
-
-  // 멤버 관련
   const [members, setMembers] = useState<Option[]>([]);
-  const [selectedMember, setSelectedMember] = useState<Option | null>(null);
   const [assigneeId, setAssigneeId] = useState<number | null>(null);
+  const [selectedColumnId, setSelectedColumnId] = useState<number | null>(null);
 
-  // 공백값 체크(필수 표시 붙은것만!)
+  // 편집 모드 여부
+  const isEditMode = mode === "edit";
+
+  // 필수 값 체크
   const isDisabled = title.trim() === "" || description.trim() === "";
 
-  const { columnIdData, setMembersId, columnStatusTitle } = useColumnId();
-  const cardId = columnIdData?.cardId ?? 0;
-  const dashboardId = columnIdData?.dashboardId ?? 0;
-  const columnId = columnIdData?.columnId ?? 0;
-
-  // 상태 선택하기 - 주스탠드 데이터를 활용해서 생성
-  const stateOpt = columnStatusTitle
-    ? Object.entries(columnStatusTitle).map(([title, id]) => ({
-        value: String(id),
-        label: title,
-        chip: <Chip variant="status" label={title} />,
-      }))
-    : [];
-
-  // 멤버 목록 가져오기
+  // 멤버 목록 로드 (생성 모드일 때만)
   useEffect(() => {
-    if (!isOpen || !dashboardId) return;
+    if (!isOpen || !dashboardId || isEditMode) return;
 
     (async () => {
       try {
         const res = await getMembers(dashboardId, { page: 1, size: 20 });
-
         const opts = res.members.map((m) => ({
           value: String(m.userId),
           label: m.nickname,
@@ -89,32 +83,25 @@ export default function ModifyCardModal({
             />
           ),
         }));
-
         setMembers(opts);
       } catch (err) {
         console.error("멤버 목록 불러오기 실패:", err);
       }
     })();
-  }, [isOpen, dashboardId]);
+  }, [isOpen, dashboardId, isEditMode]);
 
-  // 담당자 선택 시 호출되는 함수
-  const handleAssigneeSelect = (opt: Option) => {
-    const selectedId = Number(opt.value);
-    setAssigneeId(selectedId);
-    setSelectedMember(opt);
-
-    // 선택된 담당자만 Zustand에 저장
-    setMembersId([opt]);
-  };
-
-  // 상태(컬럼) 선택 시 호출되는 함수
-  const handleStatusSelect = (opt: Option) => {
-    const newColumnId = Number(opt.value);
-    setSelectedColumnId(newColumnId);
-  };
-
+  // 수정 모드일 때 propMembers 사용
   useEffect(() => {
-    if (cardData && isOpen && members.length > 0) {
+    if (isEditMode && propMembers) {
+      if (Array.isArray(propMembers)) {
+        setMembers(propMembers);
+      }
+    }
+  }, [isEditMode, propMembers]);
+
+  // 카드 데이터로 폼 초기화 (수정 모드)
+  useEffect(() => {
+    if (cardData && isOpen && isEditMode) {
       setTitle(cardData.title || "");
       setDescription(cardData.description || "");
       setDueDate(cardData.dueDate ? new Date(cardData.dueDate) : null);
@@ -132,78 +119,87 @@ export default function ModifyCardModal({
       setSelectedColumnId(columnId);
 
       if (cardData.assignee) {
-        const currentAssigneeId = cardData.assignee.id;
-        setAssigneeId(currentAssigneeId);
-        const currentMember = members.find((m) => Number(m.value) === currentAssigneeId);
-        if (currentMember) {
-          setSelectedMember(currentMember);
-          setMembersId([currentMember]);
-        }
+        setAssigneeId(cardData.assignee.id);
       }
     }
-  }, [cardData, isOpen, members, columnId]);
+  }, [cardData, isOpen, isEditMode, columnId]);
 
-  const handleUpdate = async () => {
+  // 담당자 선택 핸들러
+  const handleAssigneeSelect = (opt: Option) => {
+    const selectedId = Number(opt.value);
+    setAssigneeId(selectedId);
+  };
+
+  // 상태(컬럼) 선택 핸들러 (수정 모드용)
+  const handleStatusSelect = (opt: Option) => {
+    const newColumnId = Number(opt.value);
+    setSelectedColumnId(newColumnId);
+  };
+
+  // 메인 처리 함수
+  const handleSubmit = async () => {
     if (isDisabled || isLoading) return;
-
-    // cardId 있는지
-    if (!cardId) {
-      alert("카드 확인 실패");
-      return;
-    }
 
     if (!assigneeId) {
       alert("담당자를 선택해주세요.");
       return;
     }
 
+    if (isEditMode && !cardId) {
+      alert("카드 확인 실패");
+      return;
+    }
+
+    if (!isEditMode && !columnId) {
+      alert("컬럼 정보가 없습니다.");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      // 이미지 업로드 부분
+      // 이미지 업로드 처리
       let updateImg: string | undefined;
+
       if (imageFile) {
         try {
           const formData = new FormData();
           formData.append("image", imageFile);
+          const uploadResult = await uploadCardImage(columnId, formData);
 
-          const uploaded = await uploadCardImage(columnId, formData);
-          const direct = (uploaded as { imageUrl?: unknown }).imageUrl;
-          const nested = (uploaded as { data?: { imageUrl?: unknown } }).data?.imageUrl;
+          const direct = (uploadResult as { imageUrl?: unknown }).imageUrl;
+          const nested = (uploadResult as { data?: { imageUrl?: unknown } }).data?.imageUrl;
           const url =
             typeof direct === "string" ? direct : typeof nested === "string" ? nested : undefined;
 
           updateImg = url;
-        } catch {
-          console.error("이미지 업로드 실패");
+        } catch (uploadError) {
+          console.error("이미지 업로드 실패", uploadError);
         }
       } else if (imageUrl && !imageUrl.startsWith("blob:")) {
         updateImg = imageUrl;
       }
 
-      // 카드가 이동할 컬럼 ID 결정
-      const targetColumnId = selectedColumnId || columnId;
-
-      // 카드 수정 데이터 준비
-      const updateData = {
+      // 카드 데이터 준비
+      const cardData = {
         assigneeUserId: assigneeId,
-        dashboardId: dashboardId,
-        columnId: targetColumnId, // 새로운 컬럼 ID 사용
+        dashboardId,
+        columnId: isEditMode ? selectedColumnId || columnId : columnId,
         title: title.trim(),
-        description,
+        description: description.trim(),
         dueDate: dueDate ? dayjs(dueDate).format("YYYY-MM-DD HH:mm") : "",
-        tags: tags.map((t) => t.label),
+        tags: tags.map((tag) => tag.label),
         imageUrl: updateImg,
       };
 
-      // 카드 수정 API 호출
-      const updateResult = await updateCard(cardId, updateData);
-
-      // 컬럼 상태 업데이트
-      if (setColumns) {
+      if (isEditMode) {
+        // 수정 모드
+        const updateResult = await updateCard(cardId!, cardData);
         const updatedCard =
           "data" in (updateResult as any) ? (updateResult as any).data : updateResult;
+        const targetColumnId = selectedColumnId || columnId;
 
+        // 컬럼 상태 업데이트
         setColumns((prevColumns) => {
           return prevColumns.map((col) => {
             if (col.id === columnId && targetColumnId !== columnId) {
@@ -228,18 +224,41 @@ export default function ModifyCardModal({
             return col;
           });
         });
+
+        alert("수정되었습니다.");
+        if (onModifyComplete) {
+          onModifyComplete();
+        }
+      } else {
+        // 생성 모드
+        const createResult = await createCard(cardData);
+        const createdCard: Card =
+          "data" in (createResult as any) ? (createResult as any).data : createResult;
+        const createColumnId = createdCard.columnId;
+
+        // 컬럼 상태 업데이트
+        setColumns((prevColumns) =>
+          prevColumns.map((col) =>
+            col.id === createColumnId
+              ? {
+                  ...col,
+                  cards: [{ ...createdCard, tags } as CardWithTags, ...(col.cards ?? [])],
+                }
+              : col,
+          ),
+        );
+
+        if (onCardCreated) {
+          onCardCreated();
+        }
       }
 
-      alert("수정되었습니다.");
       handleClose();
-
-      // 수정 완료
-      if (onModifyComplete) {
-        onModifyComplete();
-      }
-    } catch (e) {
-      console.error("카드 수정 오류");
-      alert((e as Error).message || "카드 수정 중 오류가 발생했습니다.");
+    } catch (error) {
+      console.error(`카드 ${isEditMode ? "수정" : "생성"} 오류:`, error);
+      alert(
+        (error as Error).message || `카드 ${isEditMode ? "수정" : "생성"} 중 오류가 발생했습니다.`,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -254,33 +273,54 @@ export default function ModifyCardModal({
     setImageFile(null);
     setImageUrl("");
     setAssigneeId(null);
-    setSelectedMember(null);
-    setSelectedColumnId(null); // 추가
+    setSelectedColumnId(null);
 
     // 모달 닫기
-    setIsOpen(false);
+    if (typeof setIsOpen === "function") {
+      if (isEditMode) {
+        (setIsOpen as React.Dispatch<React.SetStateAction<boolean>>)(false);
+      } else {
+        (setIsOpen as () => void)();
+      }
+    }
   };
 
   return (
-    <div>
+    <>
       {isOpen && (
         <Modal open={isOpen} isOpenModal={setIsOpen} size="lg">
-          <ModalHeader title="할 일 수정" />
-          <ModalContext className="flex max-w-xl flex-col gap-7">
-            <div className="grid grid-cols-2 gap-8">
-              <Field id="status" label="상태">
-                <Select
-                  options={stateOpt}
-                  placeholder="선택하기"
-                  labelNone={true}
-                  onSelect={handleStatusSelect}
-                  value={selectedColumnId ? String(selectedColumnId) : undefined}
-                />
-              </Field>
+          <ModalHeader title={isEditMode ? "할 일 수정" : "할 일 생성"} />
+          <ModalContext className="flex flex-col gap-7">
+            {/* 수정 모드일 때만 상태 선택 표시 */}
+            {isEditMode && (
+              <div className="grid grid-cols-2 gap-8">
+                <Field id="status" label="상태">
+                  <Select
+                    options={status as Option[]}
+                    placeholder="선택하기"
+                    labelNone={true}
+                    onSelect={handleStatusSelect}
+                    value={selectedColumnId ? String(selectedColumnId) : undefined}
+                  />
+                </Field>
+                <Field id="manager" label="담당자">
+                  <Select
+                    options={members}
+                    placeholder="선택하기"
+                    onSelect={handleAssigneeSelect}
+                    value={assigneeId ? String(assigneeId) : undefined}
+                  />
+                </Field>
+              </div>
+            )}
+
+            {/* 생성 모드일 때는 담당자만 표시 */}
+            {!isEditMode && (
               <Field id="manager" label="담당자">
                 <Select options={members} placeholder="선택하기" onSelect={handleAssigneeSelect} />
               </Field>
-            </div>
+            )}
+
             <Field id="title" label="제목" essential>
               <Input
                 value={title}
@@ -288,6 +328,7 @@ export default function ModifyCardModal({
                 placeholder="제목을 입력해주세요"
               />
             </Field>
+
             <Field id="description" label="설명" essential>
               <Textarea
                 className="resize-none"
@@ -296,9 +337,11 @@ export default function ModifyCardModal({
                 placeholder="설명을 입력해주세요"
               />
             </Field>
+
             <Field id="dueDate" label="마감일">
               <DatePicker value={dueDate} onChange={(date) => setDueDate(date)} />
             </Field>
+
             <Field id="tag" label="태그">
               <TagInput
                 value={tags}
@@ -312,6 +355,7 @@ export default function ModifyCardModal({
                 }
               />
             </Field>
+
             <Field id="image" label="이미지">
               <ImgUpload
                 value={imageUrl}
@@ -322,21 +366,22 @@ export default function ModifyCardModal({
               />
             </Field>
           </ModalContext>
+
           <ModalFooter>
             <Button className="h-[54px] w-64" onClick={handleClose} disabled={isLoading}>
               취소
             </Button>
             <Button
               className="h-[54px] w-64"
-              onClick={handleUpdate}
-              color={isDisabled || isLoading ? "buttonGrey" : "buttonBlue"}
+              onClick={handleSubmit}
+              color={isDisabled ? "buttonGrey" : "buttonBlue"}
               disabled={isDisabled || isLoading}
             >
-              {isLoading ? "수정 중..." : "수정"}
+              {isLoading ? `${isEditMode ? "수정" : "생성"} 중...` : isEditMode ? "수정" : "생성"}
             </Button>
           </ModalFooter>
         </Modal>
       )}
-    </div>
+    </>
   );
 }

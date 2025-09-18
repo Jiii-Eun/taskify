@@ -7,7 +7,6 @@ import KebabModal from "@/components/modal/KebabModal";
 import Button from "@/components/common/Button";
 import { Modal, ModalHeader, ModalContext } from "@/components/modal/Modal";
 import { getCard, deleteCard } from "@/features/cards/api";
-import { useColumnId } from "@/features/columns/store";
 import { cn } from "@/lib/utils/cn";
 
 import Comment from "./Comment";
@@ -20,19 +19,28 @@ type ModalType = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setColumns?: React.Dispatch<React.SetStateAction<ColumnData[]>>;
+  dashboardId?: number;
   columnId?: number;
+  cardId?: number;
+  status: string;
 };
 
-export default function DetailCardModal({ isOpen, setIsOpen, setColumns }: ModalType) {
+export default function DetailCardModal({
+  isOpen,
+  setIsOpen,
+  setColumns,
+  dashboardId,
+  columnId,
+  cardId,
+  status,
+}: ModalType) {
   const [card, setCard] = useState<Card | null>(null);
   const [isKebabOpen, setIsKebabOpen] = useState(false);
   const [isModifyModal, setIsModifyModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { columnIdData, setMembersId } = useColumnId();
-  const cardId = columnIdData?.cardId;
-  const columnId = columnIdData?.columnId;
-  const columnTitle = columnIdData?.columnTitle;
+  console.log("맴버", card?.assignee);
+  console.log(status);
 
   // 카드 데이터 다시 불러오기 함수
   const fetchCardData = async () => {
@@ -56,7 +64,7 @@ export default function DetailCardModal({ isOpen, setIsOpen, setColumns }: Modal
             />
           ),
         };
-        setMembersId([assigneeOption]);
+        // setMembersId([assigneeOption]);
       }
     } catch (e) {
       console.error("카드 로딩 오류:", e);
@@ -201,7 +209,7 @@ export default function DetailCardModal({ isOpen, setIsOpen, setColumns }: Modal
             </div>
             <div className={cn("flex w-full flex-col gap-4", "tablet:w-[420px]", "pc:w-[450px]")}>
               <div className="flex items-center gap-5">
-                <Chip variant="status" label={columnTitle} />
+                <Chip variant="status" label={status} />
                 <span className="bg-brand-gray-300 h-5 w-[1px]" />
                 <div className="flex gap-1.5">
                   {card?.tags?.map((tag: any, index: number) => {
@@ -231,7 +239,7 @@ export default function DetailCardModal({ isOpen, setIsOpen, setColumns }: Modal
                   />
                 ) : null}
               </div>
-              <Comment />
+              <Comment cardId={cardId} columnId={columnId} dashboardId={dashboardId} />
             </div>
           </ModalContext>
 
@@ -266,8 +274,12 @@ export default function DetailCardModal({ isOpen, setIsOpen, setColumns }: Modal
           setIsOpen={setIsModifyModal}
           cardData={card}
           setColumns={setColumns}
-          onModifyComplete={handleModifyComplete}
-          columnTitle={columnIdData?.columnTitle ?? ""}
+          dashboardId={dashboardId}
+          columnId={columnId}
+          mode="edit"
+          cardId={cardId}
+          status={statusOptions}
+          members={card?.assignee}
         />
       )}
     </div>
