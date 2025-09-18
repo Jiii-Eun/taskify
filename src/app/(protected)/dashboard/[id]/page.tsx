@@ -60,6 +60,7 @@ export default function DashboardId() {
           dashboardId={dashboardId}
           columnId={item.id}
           setColumns={setColumns}
+          columns={columns}
         />
       ))}
 

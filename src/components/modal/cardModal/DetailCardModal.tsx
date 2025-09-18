@@ -33,14 +33,12 @@ export default function DetailCardModal({
   columnId,
   cardId,
   status,
+  columns,
 }: ModalType) {
   const [card, setCard] = useState<Card | null>(null);
   const [isKebabOpen, setIsKebabOpen] = useState(false);
   const [isModifyModal, setIsModifyModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  console.log("맴버", card?.assignee);
-  console.log(status);
 
   // 카드 데이터 다시 불러오기 함수
   const fetchCardData = async () => {
@@ -276,10 +274,9 @@ export default function DetailCardModal({
           setColumns={setColumns}
           dashboardId={dashboardId}
           columnId={columnId}
+          columns={columns}
           mode="edit"
           cardId={cardId}
-          status={statusOptions}
-          members={card?.assignee}
         />
       )}
     </div>

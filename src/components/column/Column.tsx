@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 
 import DeleteColumnModal from "@/components/modal/columnModal/DeleteColumnModal";
 import ManageColumnModal from "@/components/modal/columnModal/ManageColumnModal";
-// import CreateCardModal from "@/components/modal/cardModal/CreateCardModal";
 import CreateCardModal from "@/components/modal/cardModal/ModifyCardModal";
 import Card from "@/components/card/Card";
 import Chip from "@/components/common/chip/Chip";
@@ -24,9 +23,10 @@ export default function Column({
   columnId,
   dashboardId,
   setColumns,
+  columns,
 }: ColumnProps) {
+  console.log("컬럼이 컬럼에서", columns);
   const [modal, setModal] = useState<null | "manage" | "delete" | "card">(null);
-
   const loader = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(false);
   const [cursorId, setCursorId] = useState<number | undefined>(undefined);
@@ -101,7 +101,6 @@ export default function Column({
         // pc
         "pc:w-[354px] pc:flex-shrink-0 pc:border-r pc:border-b-0",
       )}
-      onClick={() => console.log("컬럼클릭시 id 숫자", columnId)}
     >
       {/* 컬럼 헤더 */}
       <div className="relative mb-[21px] flex items-center justify-between">
@@ -157,6 +156,7 @@ export default function Column({
               columnId={columnId}
               cardId={card.id}
               status={status}
+              columns={columns}
             />
           </div>
         ))}
@@ -172,6 +172,7 @@ export default function Column({
           setColumns={setColumns}
           dashboardId={dashboardId}
           columnId={columnId}
+          columns={columns}
           mode="create"
         />
       )}

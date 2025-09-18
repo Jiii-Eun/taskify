@@ -36,6 +36,7 @@ export default function Card({
   columnId,
   cardId,
   status,
+  columns,
 }: CardWithAssignee) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -140,6 +141,7 @@ export default function Card({
             columnId={columnId}
             cardId={cardId}
             status={status}
+            columns={columns}
           />
         </div>
       )}
