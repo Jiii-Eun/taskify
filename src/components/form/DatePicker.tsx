@@ -51,6 +51,7 @@ export default function CalendarCommon({ value, onChange }: CalendarCommonProps)
         withPortal
         portalId="dp-portal-root"
         popperPlacement="bottom"
+        placeholderText="날짜를 선택하세요"
         popperModifiers={[
           offset(8),
           shift({ padding: 8 }),
