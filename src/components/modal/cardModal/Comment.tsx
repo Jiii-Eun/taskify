@@ -7,11 +7,14 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Field from "@/components/form/Field";
 import Textarea from "@/components/form/Textarea";
 import Button from "@/components/common/Button";
-import { useColumnId } from "@/features/columns/store";
 import { Comment } from "@/features/comments/types";
 import { createComment, updateComment, deleteComment, getComments } from "@/features/comments/api";
-
-export default function CommentList() {
+type commentProps = {
+  cardId?: number;
+  columnId?: number;
+  dashboardId?: number;
+};
+export default function CommentList({ cardId, columnId, dashboardId }: commentProps) {
   const [input, setInput] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -19,12 +22,6 @@ export default function CommentList() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [cursorId, setCursorId] = useState<number | null>(null);
-
-  const { columnIdData } = useColumnId();
-  const cardId = columnIdData?.cardId ?? 0;
-  const dashboardId = columnIdData?.dashboardId ?? 0;
-  const columnId = columnIdData?.columnId ?? 0;
-
   // 댓글 목록 불러오기
   const fetchComments = useCallback(
     async (reset = false) => {
@@ -73,6 +70,12 @@ export default function CommentList() {
   // 댓글 생성
   const handleCreate = async () => {
     if (!input.trim() || isLoading) return;
+
+    // 필수 값들 검증
+    if (!cardId || !columnId || !dashboardId) {
+      console.error("필수 정보가 누락되었습니다.");
+      return;
+    }
 
     setIsLoading(true);
     try {

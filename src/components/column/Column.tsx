@@ -4,13 +4,13 @@ import { useState, useEffect, useRef } from "react";
 
 import DeleteColumnModal from "@/components/modal/columnModal/DeleteColumnModal";
 import ManageColumnModal from "@/components/modal/columnModal/ManageColumnModal";
+import CreateCardModal from "@/components/modal/cardModal/CardModal";
 import Card from "@/components/card/Card";
 import Chip from "@/components/common/chip/Chip";
 import KebabModal from "@/components/modal/KebabModal";
 import MyButton from "@/components/common/Button";
 import Button from "@/components/common/Button";
 import { ColumnProps } from "@/features/dashboard/types";
-import { useColumnId } from "@/features/columns/store";
 import { getCards } from "@/features/cards/api";
 import type { CardData } from "@/features/dashboard/types";
 
@@ -23,10 +23,9 @@ export default function Column({
   columnId,
   dashboardId,
   setColumns,
+  columns,
 }: ColumnProps) {
-  const [modal, setModal] = useState<null | "manage" | "delete">(null);
-  const { setColumnIdData } = useColumnId();
-
+  const [modal, setModal] = useState<null | "manage" | "delete" | "card">(null);
   const loader = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(false);
   const [cursorId, setCursorId] = useState<number | undefined>(undefined);
@@ -87,7 +86,6 @@ export default function Column({
 
   const handleClickCard = (cardId: number) => {
     if (dashboardId == null || columnId == null) return;
-    setColumnIdData(dashboardId, columnId, status, cardId);
   };
 
   return (
@@ -102,7 +100,6 @@ export default function Column({
         // pc
         "pc:w-[354px] pc:flex-shrink-0 pc:border-r pc:border-b-0",
       )}
-      onClick={() => console.log("컬럼클릭시 id 숫자", columnId)}
     >
       {/* 컬럼 헤더 */}
       <div className="relative mb-[21px] flex items-center justify-between">
@@ -134,7 +131,12 @@ export default function Column({
       {/* 카드 추가 버튼 */}
       <div className="dark:bg-dark-700 mb-4 bg-white">
         <MyButton
-          onClick={onAddCard ?? (() => {})}
+          onClick={
+            onAddCard ??
+            (() => {
+              setModal("card");
+            })
+          }
           color="buttonBasic"
           className="flex h-10 w-full items-center justify-center"
         >
@@ -146,7 +148,15 @@ export default function Column({
       <div className="flex flex-col gap-[15px]">
         {cards?.map((card) => (
           <div key={card.id} onClick={() => card.id && handleClickCard(card.id)}>
-            <Card {...card} setColumns={setColumns} columnId={columnId} />
+            <Card
+              {...card}
+              setColumns={setColumns}
+              dashboardId={dashboardId}
+              columnId={columnId}
+              cardId={card.id}
+              status={status}
+              columns={columns}
+            />
           </div>
         ))}
         {hasMore && <div ref={loader} className="h-6" />}
@@ -154,6 +164,16 @@ export default function Column({
       </div>
 
       {/* 수정하기, 삭제하기 모달 관리  */}
+      {modal === "card" && (
+        <CreateCardModal
+          isOpen
+          setIsOpen={() => setModal(null)}
+          setColumns={setColumns}
+          dashboardId={dashboardId}
+          columnId={columnId}
+          mode="create"
+        />
+      )}
       {modal === "manage" && columnId !== null && (
         <ManageColumnModal
           isOpen
